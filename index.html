@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Territory OS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState } = React;
+    
+    // ==================== PASSWORD GATE ====================
+    const PASSWORD = "NorthCentral";
+    
+    const PasswordGate = ({ onSuccess }) => {
+      const [input, setInput] = useState("");
+      const [error, setError] = useState(false);
+      
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (input === PASSWORD) {
+          sessionStorage.setItem('territory_auth', 'true');
+          onSuccess();
+        } else {
+          setError(true);
+          setInput("");
+        }
+      };
+      
+      return (
+        <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 shadow-xl max-w-sm w-full">
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold text-gray-900">Territory OS</h1>
+              <p className="text-sm text-gray-500 mt-1">Enter password to continue</p>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="password"
+                value={input}
+                onChange={(e) => { setInput(e.target.value); setError(false); }}
+                placeholder="Password"
+                className={`w-full px-4 py-3 border rounded-lg text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  error ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                }`}
+                autoFocus
+              />
+              {error && (
+                <p className="text-red-500 text-sm text-center mt-2">Incorrect password</p>
+              )}
+              <button
+                type="submit"
+                className="w-full mt-4 bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+              >
+                Enter
+              </button>
+            </form>
+          </div>
+        </div>
+      );
+    };
+    // ==================== END PASSWORD GATE ====================
+    
+    // ==================== TERRITORY DATA ====================
+    // Last Updated: Jan 15, 2026
+    // To update: Replace this data block and re-upload
+    // ========================================================
+    
+    const territoryData = [
+      {
+        rank: 1,
+        account: "Jack Henry & Associates",
+        score: 100,
+        tier: 1,
+        status: "8 warm + 30 cold ready",
+        lastAction: "Jan 15",
+        nextAction: "Send sequences",
+        scenario: "Cloud-Native / K8s Observability + First Pane of Glass",
+        industry: "Financial Services / FinTech",
+        employees: "7,000+",
+        hq: "Monett, MO",
+        whyNow: "Reddy Preetham Cloud Trial Jan 14 (YESTERDAY). Scott Sayles k6 pricing. Rick Windham 148hr + Enterprise Trial request (INBOUND). SRE hiring Jan 2026.",
+        whyNowSource: "CSV + ChatAE",
+        whyNowDate: "Jan 14-15, 2026",
+        whyGrafana: "Native OTel support. Unified view for 100+ microservices. k6 + Prometheus integration. GCP/K8s alignment. Financial services proof points.",
+        whyGrafanaSource: "ChatAE + Tech Stack",
+        whyGrafanaDate: "Jan 15, 2026",
+        whyAnything: "99.999% uptime target. Platform Engineering building IDP + observability blueprints. Microservices re-arch (100+ services). 6+ observability tools = sprawl.",
+        whyAnythingSource: "ChatAE",
+        whyAnythingDate: "Jan 15, 2026",
+        dataQuality: "strong",
+        dataQualityNote: "Perfect score. Inbound + trial + power user + buying signals across 6 personas.",
+        warmLeads: [
+          { name: "Rick Windham", title: "Sr. Platform Engineer", signal: "148 hrs usage + Enterprise Trial request", tier: 1 },
+          { name: "Reddy Preetham", title: "Unknown", signal: "Cloud Trial started Jan 14", tier: 1 },
+          { name: "Scott Sayles", title: "Unknown", signal: "k6 pricing research", tier: 1 },
+          { name: "6 additional contacts", title: "Various", signal: "Activity last 30 days", tier: 2 }
+        ],
+        coldContacts: 30,
+        coldPersonas: ["T1 (Platform Eng)", "T2 (SRE)", "T6 (VP Eng)", "T7 (DevOps)", "T8 (Architect)"],
+        techStack: {
+          current: ["Datadog", "Honeycomb", "Prometheus", "Splunk", "New Relic", "CloudWatch"],
+          displacing: "Datadog (cost), Honeycomb (consolidation)",
+          infrastructure: "GCP, Kubernetes, 100+ microservices"
+        },
+        dealStatus: {
+          crmStatus: "Net new",
+          actualStatus: "Active evaluation",
+          keyBlockers: "None identified"
+        },
+        proofPoints: ["Standard Chartered: 64 tools → unified", "ASOS: 50% MTTR reduction", "Financial services compliance"],
+        competitorIntel: "6+ observability tools = sprawl. Datadog likely cost pressure. Honeycomb for tracing but fragmented.",
+        risks: [],
+        doNotContact: [],
+        nextActions: [
+          { action: "Send 8 warm emails", due: "Jan 15", priority: "P0" },
+          { action: "Send 30 cold sequence emails", due: "Jan 15-16", priority: "P0" },
+          { action: "Run LinkedIn searches for remaining personas", due: "Jan 16", priority: "P1" }
+        ],
+        dataSources: [
+          { source: "ChatAE triggers", date: "Jan 15, 2026", notes: "Strong signals" },
+          { source: "Behavioral CSV", date: "Jan 14-15, 2026", notes: "6 warm leads" },
+          { source: "Gong", date: "N/A", notes: "No prior calls" },
+          { source: "ZoomInfo", date: "Jan 15, 2026", notes: "Tech stack validated" }
+        ]
+      },
+      {
+        rank: 2,
+        account: "Sweetwater",
+        score: 92,
+        tier: 1,
+        status: "15 emails sent",
+        lastAction: "Jan 13",
+        nextAction: "FU #1 (Jan 16)",
+        scenario: "Land Expansion (Existing Customer)",
+        industry: "Retail / E-commerce (Music Equipment)",
+        employees: "2,500+",
+        hq: "Fort Wayne, IN",
+        whyNow: "15 contacts with active signals: Chris Rottinger (130 hrs, pricing), Calista Helinski (151 hrs), multiple pricing page views.",
+        whyNowSource: "CSV",
+        whyNowDate: "Jan 13, 2026",
+        whyGrafana: "Existing customer ($18K ARR, k6 only). Datadog 2/5 = light footprint, low switching friction. Already proven value.",
+        whyGrafanaSource: "CRM + HG Data",
+        whyGrafanaDate: "Jan 13, 2026",
+        whyAnything: "Microservices migration (monolith → microservices). Platform Engineering managing K8s, CI/CD, logging. CIO rebuilt CRM + warehouse in-house.",
+        whyAnythingSource: "ChatAE",
+        whyAnythingDate: "Jan 13, 2026",
+        dataQuality: "strong",
+        dataQualityNote: "All three pillars verified.",
+        warmLeads: [
+          { name: "Chris Rottinger", title: "Unknown", signal: "130 hrs + pricing research", tier: 1 },
+          { name: "Calista Helinski", title: "Unknown", signal: "151 hrs usage", tier: 1 },
+          { name: "13 additional contacts", title: "Various", signal: "Active signals", tier: 1 }
+        ],
+        coldContacts: 0,
+        coldPersonas: [],
+        techStack: {
+          current: ["Datadog (2/5)", "Grafana k6"],
+          displacing: "Datadog for metrics/logs",
+          infrastructure: "Kubernetes, microservices migration in progress"
+        },
+        dealStatus: {
+          crmStatus: "Existing customer ($18K k6)",
+          actualStatus: "Expansion opportunity",
+          keyBlockers: "None - already customer"
+        },
+        proofPoints: ["Already proving k6 value", "Natural expansion path"],
+        competitorIntel: "Datadog 2/5 = light footprint. Low switching cost.",
+        risks: [],
+        doNotContact: [
+          { name: "Chris Groleau", reason: "On Nov-Jan closed-lost deal", until: "New angle identified" }
+        ],
+        nextActions: [
+          { action: "FU #1 to all 15 contacts", due: "Jan 16", priority: "P0" }
+        ],
+        dataSources: [
+          { source: "ChatAE triggers", date: "Jan 13, 2026", notes: "Platform initiatives" },
+          { source: "Behavioral CSV", date: "Jan 13, 2026", notes: "15 warm leads" },
+          { source: "CRM", date: "Jan 13, 2026", notes: "$18K ARR k6" },
+          { source: "HG Data", date: "Jan 13, 2026", notes: "Tech stack" }
+        ]
+      },
+      {
+        rank: 3,
+        account: "Cision",
+        score: 88,
+        tier: 1,
+        status: "4 emails sent",
+        lastAction: "Jan 13",
+        nextAction: "FU #1 (Jan 17-18)",
+        scenario: "Closed-Lost Re-engagement (NEW contacts)",
+        industry: "Media / PR Software",
+        employees: "4,000+",
+        hq: "Chicago, IL",
+        whyNow: "NEW team evaluating (Kamlesh 36 pages / Sunil 7 hrs Cloud trial). Different people than 2023 closed-lost. Activity within 7 days.",
+        whyNowSource: "CSV",
+        whyNowDate: "Jan 13, 2026",
+        whyGrafana: "OSS migration failed. Still Elasticsearch 5/5 after 14 months (wanted Loki). Cloud solves operational burden. Exited Datadog successfully.",
+        whyGrafanaSource: "Gong Nov 2023 + ZoomInfo",
+        whyGrafanaDate: "Jan 13, 2026",
+        whyAnything: "Wanted to 'go all in' on Grafana stack (Loki + Mimir). Staff SRE hiring = scaling team. 99.5% uptime SLA commitment.",
+        whyAnythingSource: "Gong Nov 2023 + ChatAE",
+        whyAnythingDate: "Jan 13, 2026",
+        dataQuality: "strong",
+        dataQualityNote: "Gong provides buyer context.",
+        warmLeads: [
+          { name: "Kamlesh", title: "Unknown", signal: "36 pages research", tier: 1 },
+          { name: "Sunil", title: "Unknown", signal: "7 hrs Cloud trial", tier: 1 },
+          { name: "2 additional contacts", title: "Various", signal: "Recent activity", tier: 2 }
+        ],
+        coldContacts: 0,
+        coldPersonas: [],
+        techStack: {
+          current: ["Elasticsearch 5/5", "Grafana OSS"],
+          displacing: "Elasticsearch with Loki",
+          infrastructure: "Self-hosted Grafana stack, wanted Loki + Mimir"
+        },
+        dealStatus: {
+          crmStatus: "8 - Deal Lost (Nov 2023)",
+          actualStatus: "NEW evaluation by different team",
+          keyBlockers: "Original: OSS migration failed (operational burden)"
+        },
+        proofPoints: ["Successfully exited Datadog", "OSS to Cloud migration solves their pain"],
+        competitorIntel: "Elasticsearch 5/5 - they want out. Prior Datadog exit = proven they can migrate.",
+        gongInsights: [
+          "Wanted 'all in' on Grafana stack",
+          "Staff SRE hiring - scaling team",
+          "Can't afford senior engineers managing infra",
+          "99.5% uptime SLA commitment"
+        ],
+        risks: ["Previous deal lost - need fresh angle via Cloud (not OSS)"],
+        doNotContact: [],
+        nextActions: [
+          { action: "FU #1 to 4 contacts", due: "Jan 17-18", priority: "P0" }
+        ],
+        dataSources: [
+          { source: "ChatAE triggers", date: "Jan 13, 2026", notes: "Hiring signals" },
+          { source: "Behavioral CSV", date: "Jan 13, 2026", notes: "4 warm leads" },
+          { source: "Gong", date: "Nov 2023", notes: "Original deal context" },
+          { source: "ZoomInfo", date: "Jan 13, 2026", notes: "Elasticsearch confirmed" }
+        ]
+      },
+      {
+        rank: 4,
+        account: "AbbVie",
+        score: 82,
+        tier: 1,
+        status: "10 emails sent",
+        lastAction: "Jan 14",
+        nextAction: "FU #1 (Jan 17)",
+        scenario: "First Pane of Glass + Tool Consolidation",
+        industry: "Pharmaceuticals",
+        employees: "50,000+",
+        hq: "North Chicago, IL",
+        whyNow: "Tommie Carter logged in Jan 13. Julius Popoola researching Loki/Alloy last 30 days. 5 re:Invent booth scans Dec 2025.",
+        whyNowSource: "CSV + Gong",
+        whyNowDate: "Jan 14, 2026",
+        whyGrafana: "Champion (Tommie) had budget line item. Goal: 'tie all tool sets into single view.' Splunk/Cribl for SIEM = Grafana as unified viz layer.",
+        whyGrafanaSource: "Gong",
+        whyGrafanaDate: "Jul-Sep 2025",
+        whyAnything: "Splunk + ServiceNow integration is stated 'next phase.' Platform Engineering hiring. Incident management with MTTR tracking.",
+        whyAnythingSource: "Gong + ChatAE",
+        whyAnythingDate: "Jan 14, 2026",
+        dataQuality: "strong",
+        dataQualityNote: "Gong provides buyer context. ChatAE validates initiatives.",
+        warmLeads: [
+          { name: "Tommie Carter", title: "Champion", signal: "Budget line item, logged in Jan 13", tier: 1 },
+          { name: "Julius Popoola", title: "Unknown", signal: "Loki/Alloy research last 30 days", tier: 1 },
+          { name: "5 re:Invent contacts", title: "Various", signal: "Booth scans Dec 2025", tier: 2 },
+          { name: "3 additional", title: "Various", signal: "Active signals", tier: 2 }
+        ],
+        coldContacts: 0,
+        coldPersonas: [],
+        techStack: {
+          current: ["Splunk", "Cribl", "ServiceNow", "Dynatrace", "PagerDuty"],
+          displacing: "Unified viz layer on top of Splunk",
+          infrastructure: "AWS, on-prem hybrid"
+        },
+        dealStatus: {
+          crmStatus: "On-Prem deal stalled",
+          actualStatus: "Active - Cloud may bypass blocker",
+          keyBlockers: "MSA blocker for deals <$250K. On-Prem firewall issue."
+        },
+        proofPoints: ["Champion with budget approval", "60-user pack previously approved"],
+        gongInsights: [
+          "Goal: 'tie all tool sets into single view'",
+          "Splunk + ServiceNow integration 'next phase'",
+          "Budget line item existed",
+          "60-user pack approved"
+        ],
+        competitorIntel: "Splunk/Cribl for SIEM. Dynatrace in use. PagerDuty for alerting.",
+        risks: ["MSA blocker for deals <$250K", "On-Prem firewall issue may persist"],
+        doNotContact: [
+          { name: "Paul Burke", reason: "'Not interested' (Gong Sep 2025)", until: "-" }
+        ],
+        nextActions: [
+          { action: "FU #1 to 10 contacts", due: "Jan 17", priority: "P0" }
+        ],
+        dataSources: [
+          { source: "ChatAE triggers", date: "Jan 14, 2026", notes: "Hiring signals" },
+          { source: "Behavioral CSV", date: "Jan 14, 2026", notes: "10 warm leads" },
+          { source: "Gong", date: "Jul-Sep 2025", notes: "Champion context" }
+        ]
+      },
+      {
+        rank: 5,
+        account: "Zoro.com",
+        score: 76,
+        tier: 2,
+        status: "15 emails sent",
+        lastAction: "Jan 13",
+        nextAction: "FU #1 (Jan 16)",
+        scenario: "Land Expansion (OSS → Cloud)",
+        industry: "Industrial Supply / E-commerce",
+        employees: "150+",
+        hq: "Buffalo Grove, IL",
+        whyNow: "Danny Seeger 611 pages (8 days ago), Sufan Huang Cloud trial active, 15 warm leads total.",
+        whyNowSource: "CSV",
+        whyNowDate: "Jan 13, 2026",
+        whyGrafana: "Already self-hosted Grafana OSS users (274-441 hrs across contacts). Cloud trial = evaluating managed. Natural upgrade path.",
+        whyGrafanaSource: "CSV",
+        whyGrafanaDate: "Jan 13, 2026",
+        whyAnything: "Engineering scaled 6 → 150+ (2017-2025). Platform teams managing observability. 15-20M SKUs = high-cardinality metrics. TCO research.",
+        whyAnythingSource: "Account research",
+        whyAnythingDate: "Jan 13, 2026",
+        dataQuality: "strong",
+        dataQualityNote: "Engineering scale verified from company research.",
+        warmLeads: [
+          { name: "Danny Seeger", title: "Unknown", signal: "611 pages (8 days ago)", tier: 1 },
+          { name: "Sufan Huang", title: "Unknown", signal: "Cloud trial active", tier: 1 },
+          { name: "timothy.boex", title: "Unknown", signal: "73 pages pricing research", tier: 1 },
+          { name: "12 additional", title: "Various", signal: "274-441 hrs usage", tier: 1 }
+        ],
+        coldContacts: 0,
+        coldPersonas: [],
+        techStack: {
+          current: ["Grafana OSS (heavy usage)"],
+          displacing: "OSS → Cloud migration",
+          infrastructure: "Self-hosted Grafana, high-cardinality metrics"
+        },
+        dealStatus: {
+          crmStatus: "2 active opps (AE)",
+          actualStatus: "Active evaluation",
+          keyBlockers: "None identified"
+        },
+        proofPoints: ["Heavy OSS usage proves value", "Natural Cloud upgrade path"],
+        competitorIntel: "Self-hosted Grafana only. No competing vendor.",
+        risks: [],
+        doNotContact: [
+          { name: "Giovanni Portogallo", reason: "ZoomInfo: 'not interested' (Oct 16, 2025)", until: "-" },
+          { name: "Jay Siddiqui", reason: "Desktop Support + Opp Lost", until: "-" },
+          { name: "eus.accessmngmt@zoro.com", reason: "Service account", until: "-" }
+        ],
+        nextActions: [
+          { action: "FU #1 to 15 contacts", due: "Jan 16", priority: "P0" }
+        ],
+        dataSources: [
+          { source: "Behavioral CSV", date: "Jan 13, 2026", notes: "15 warm leads, heavy usage" },
+          { source: "Account research", date: "Jan 13, 2026", notes: "Engineering scale verified" }
+        ],
+        tiebreaker: "Ranked above Stifel due to recency. Danny Seeger 611 pages 8 days ago vs Stifel stale since Oct."
+      },
+      {
+        rank: 6,
+        account: "Stifel",
+        score: 76,
+        tier: 2,
+        status: "Pending",
+        lastAction: "Oct 2025",
+        nextAction: "Load Gong flows, FU #1 (Jan 17)",
+        scenario: "Closed-Lost Re-engagement (Deal ON HOLD)",
+        industry: "Financial Services",
+        employees: "9,000+",
+        hq: "St. Louis, MO",
+        whyNow: "$250K deal ON HOLD (not closed-lost). Chris Malone said 'mid-Nov follow-up' - window passed but door not closed. Sr Observability Engineer job posting.",
+        whyNowSource: "Gong",
+        whyNowDate: "Oct 2025",
+        whyGrafana: "$1M Datadog + New Relic spend they want to exit. Moog/AIOps has 'minimal dashboard capability' (their words).",
+        whyGrafanaSource: "Gong",
+        whyGrafanaDate: "Oct 2025",
+        whyAnything: "Consolidation mandate. 2026 roadmap planning active. Security/compliance requirements for financial services.",
+        whyAnythingSource: "Gong + ChatAE",
+        whyAnythingDate: "Oct 2025",
+        dataQuality: "medium",
+        dataQualityNote: "Gong data from Oct 2025. Needs refresh.",
+        warmLeads: [
+          { name: "Chris Malone", title: "Decision Maker", signal: "Said 'mid-Nov follow-up'", tier: 1 },
+          { name: "8 additional contacts", title: "Various", signal: "From prior deal", tier: 2 }
+        ],
+        coldContacts: 0,
+        coldPersonas: [],
+        techStack: {
+          current: ["Datadog ($1M)", "New Relic", "Moog/AIOps"],
+          displacing: "Datadog + New Relic",
+          infrastructure: "Financial services infrastructure"
+        },
+        dealStatus: {
+          crmStatus: "8 - Deal Lost",
+          actualStatus: "ON HOLD (not rejected)",
+          keyBlockers: "Timing - 2026 roadmap planning"
+        },
+        proofPoints: ["$250K deal was real", "$1M Datadog spend to displace"],
+        gongInsights: [
+          "Chris Malone is decision maker",
+          "'mid-Nov follow-up' - door not closed",
+          "Moog/AIOps has 'minimal dashboard capability'",
+          "$1M Datadog spend they want to exit"
+        ],
+        competitorIntel: "$1M Datadog + New Relic. Moog/AIOps for alerting (unhappy with it).",
+        risks: ["Window may have passed", "Need to re-engage carefully"],
+        doNotContact: [
+          { name: "Isaac Hann", reason: "Left company", until: "-" },
+          { name: "John Haas", reason: "Left company", until: "-" },
+          { name: "Cassidy Thomas", reason: "Stale (last activity Oct 2022)", until: "-" }
+        ],
+        nextActions: [
+          { action: "Load Gong flows", due: "Jan 17", priority: "P0" },
+          { action: "FU #1 to Chris Malone", due: "Jan 17", priority: "P0" }
+        ],
+        dataSources: [
+          { source: "Gong", date: "Oct 2025", notes: "Deal context, needs refresh" },
+          { source: "ChatAE", date: "Oct 2025", notes: "Hiring signals" }
+        ],
+        tiebreaker: "Ranked below Zoro due to stale timing. Oct 2025 vs Zoro 8 days ago."
+      },
+      {
+        rank: 7,
+        account: "Zebra Technologies",
+        score: 68,
+        tier: 2,
+        status: "Ready to send",
+        lastAction: "Jan 14",
+        nextAction: "Send warm leads, run LinkedIn",
+        scenario: "Tool Consolidation + Migration",
+        industry: "Technology / Hardware",
+        employees: "19,000+",
+        hq: "Lincolnshire, IL",
+        whyNow: "5 warm leads with recent activity. Andy Peckys (SRE Team Lead) researching. Cloud trial signals.",
+        whyNowSource: "CSV",
+        whyNowDate: "Jan 14, 2026",
+        whyGrafana: "Replacing Sumo Logic with Loki. OpsRamp for multi-cloud monitoring. Natural consolidation play.",
+        whyGrafanaSource: "ChatAE",
+        whyGrafanaDate: "Jan 14, 2026",
+        whyAnything: "Large account (19K+ employees). Fragmented observability likely. Multi-cloud monitoring consolidation.",
+        whyAnythingSource: "ChatAE + Account research",
+        whyAnythingDate: "Jan 14, 2026",
+        dataQuality: "medium",
+        dataQualityNote: "No prior Grafana relationship. True cold outbound.",
+        warmLeads: [
+          { name: "Andy Peckys", title: "SRE Team Lead", signal: "Researching", tier: 1 },
+          { name: "5 additional", title: "Various", signal: "Recent activity", tier: 2 }
+        ],
+        coldContacts: 48,
+        coldPersonas: ["T1", "T2", "T3", "T4", "T6", "T8"],
+        techStack: {
+          current: ["Sumo Logic", "OpsRamp"],
+          displacing: "Sumo Logic with Loki",
+          infrastructure: "Multi-cloud"
+        },
+        dealStatus: {
+          crmStatus: "Net new",
+          actualStatus: "Early stage",
+          keyBlockers: "None identified"
+        },
+        proofPoints: ["Large enterprise scale", "Multi-cloud consolidation"],
+        competitorIntel: "Sumo Logic (exiting). OpsRamp for multi-cloud.",
+        risks: ["Large org = long sales cycle", "No prior relationship"],
+        doNotContact: [],
+        nextActions: [
+          { action: "Send 6 warm lead emails", due: "Jan 15", priority: "P0" },
+          { action: "Run LinkedIn searches for all personas", due: "Jan 16", priority: "P1" }
+        ],
+        dataSources: [
+          { source: "ChatAE triggers", date: "Jan 14, 2026", notes: "Tool signals" },
+          { source: "Behavioral CSV", date: "Jan 14, 2026", notes: "6 warm leads" }
+        ]
+      },
+      {
+        rank: 8,
+        account: "EMC Insurance",
+        score: 54,
+        tier: 3,
+        status: "1 email pending",
+        lastAction: "Jan 14",
+        nextAction: "Send Tom Gass email",
+        scenario: "Legacy Modernization",
+        industry: "Insurance",
+        employees: "2,500+",
+        hq: "Des Moines, IA",
+        whyNow: "Tom Gass researching (recent activity). SolarWinds displacement opportunity ($31K).",
+        whyNowSource: "CSV + CRM",
+        whyNowDate: "Jan 14, 2026",
+        whyGrafana: "SolarWinds user. PagerDuty for alerting (OnCall replacement). Mid-market insurance = simpler deal.",
+        whyGrafanaSource: "ZoomInfo + CRM",
+        whyGrafanaDate: "Jan 14, 2026",
+        whyAnything: "⚠️ HYPOTHESIS: Legacy monitoring modernization. Insurance compliance requirements.",
+        whyAnythingSource: "Inferred",
+        whyAnythingDate: "-",
+        dataQuality: "weak",
+        dataQualityNote: "Why ANYTHING is hypothesis only. Needs Gong or discovery.",
+        warmLeads: [
+          { name: "Tom Gass", title: "Unknown", signal: "Recent research activity", tier: 1 }
+        ],
+        coldContacts: 0,
+        coldPersonas: [],
+        techStack: {
+          current: ["SolarWinds ($31K)", "PagerDuty"],
+          displacing: "SolarWinds",
+          infrastructure: "Traditional insurance IT"
+        },
+        dealStatus: {
+          crmStatus: "Net new",
+          actualStatus: "Early stage",
+          keyBlockers: "Limited intel"
+        },
+        proofPoints: ["SolarWinds displacement", "Insurance vertical play"],
+        competitorIntel: "SolarWinds $31K. PagerDuty for alerting.",
+        risks: ["Weak data quality", "Hypothesis-based Why ANYTHING"],
+        doNotContact: [
+          { name: "Safal Magar", reason: "LinkedIn decline: 'not the right audience'", until: "-" }
+        ],
+        nextActions: [
+          { action: "Send Tom Gass email", due: "Jan 15", priority: "P1" }
+        ],
+        dataSources: [
+          { source: "Behavioral CSV", date: "Jan 14, 2026", notes: "1 warm lead" },
+          { source: "ZoomInfo", date: "Jan 14, 2026", notes: "Tech stack" },
+          { source: "CRM", date: "Jan 14, 2026", notes: "$31K SolarWinds" }
+        ]
+      },
+      {
+        rank: 9,
+        account: "Motorola Solutions",
+        score: 45,
+        tier: 4,
+        status: "Nurture",
+        lastAction: "Jan 12",
+        nextAction: "Wait for AE angle",
+        scenario: "Data Sovereignty Blocker",
+        industry: "Public Safety / Communications",
+        employees: "21,000+",
+        hq: "Chicago, IL",
+        whyNow: "Deal closed-lost Jan 12. Data sovereignty blocker (AU GovCloud). Retaining Prometheus SaaS for now.",
+        whyNowSource: "Gong",
+        whyNowDate: "Jan 12, 2026",
+        whyGrafana: "They WANT Grafana. Building parallel AWS Managed Grafana because no AU GovCloud option.",
+        whyGrafanaSource: "Gong",
+        whyGrafanaDate: "Jan 12, 2026",
+        whyAnything: "Mission-critical (public safety radios). Can't risk outage. Data sovereignty non-negotiable.",
+        whyAnythingSource: "Gong",
+        whyAnythingDate: "Jan 12, 2026",
+        dataQuality: "strong",
+        dataQualityNote: "Clear Gong context. Product blocker, not sales blocker.",
+        warmLeads: [],
+        coldContacts: 0,
+        coldPersonas: [],
+        techStack: {
+          current: ["Grafana SaaS (Prometheus)", "AWS Managed Grafana (building)"],
+          displacing: "N/A - product blocker",
+          infrastructure: "AU GovCloud required"
+        },
+        dealStatus: {
+          crmStatus: "8 - Deal Lost",
+          actualStatus: "PRODUCT BLOCKER (not sales rejection)",
+          keyBlockers: "No AU GovCloud. Data sovereignty non-negotiable."
+        },
+        proofPoints: ["They want Grafana", "Retaining Prometheus SaaS"],
+        gongInsights: [
+          "Matthew: 'It's basically never fucked us. Perfect record.'",
+          "Matthew: 'I wish you had prometheus database in every country'",
+          "Matthew: 'We plan to use both at the same time' (dual systems)",
+          "Matthew: 'Going to cost us a bunch of money in engineering'",
+          "Marc (SE): 'We don't have AU govcloud, EU environment'",
+          "Libby: 'Our FedRAMP offering is newer. Not that far advanced yet.'"
+        ],
+        competitorIntel: "Building AWS Managed Grafana as alternative. Not a competitor win - product gap.",
+        risks: ["Do not contact until AE identifies new angle", "AU GovCloud is product gap, not sales issue"],
+        doNotContact: [
+          { name: "Kevin Decker", reason: "On Jan 12 closed-lost deal", until: "AE identifies new angle" },
+          { name: "Brad Keller", reason: "On Jan 12 closed-lost deal", until: "AE identifies new angle" },
+          { name: "Patrick Dunnigan", reason: "On Jan 12 closed-lost deal", until: "AE identifies new angle" },
+          { name: "Matthew Grove", reason: "On Jan 12 closed-lost deal", until: "AE identifies new angle" }
+        ],
+        nextActions: [
+          { action: "Wait for AE / product update", due: "TBD", priority: "P3" }
+        ],
+        dataSources: [
+          { source: "Gong", date: "Jan 12, 2026", notes: "Full transcript available" }
+        ]
+      }
+    ];
+    
+    // ==================== END DATA ====================
+    
+    // Icons as simple SVG components
+    const FlameIcon = () => (
+      <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 23c-4.97 0-9-3.58-9-8 0-2.52 1.17-5.06 3.5-7.6C8.17 5.73 10 3.66 11.3 2c.17-.22.5-.22.7 0C13.3 3.66 15.17 5.73 16.5 7.4 18.83 9.94 20 12.48 20 15c0 4.42-4.03 8-9 8z"/>
+      </svg>
+    );
+    
+    const AlertIcon = () => (
+      <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+    );
+    
+    const CircleIcon = ({ className }) => (
+      <svg className={`w-4 h-4 ${className || 'text-gray-400'}`} fill="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+      </svg>
+    );
+    
+    const CheckIcon = () => (
+      <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+    
+    const XIcon = () => (
+      <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+    
+    const ChevronRight = () => (
+      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+      </svg>
+    );
+    
+    const ChevronLeft = () => (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+      </svg>
+    );
+    
+    const SearchIcon = () => (
+      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    );
+    
+    // Helper functions
+    const getTierIcon = (tier) => {
+      switch(tier) {
+        case 1: return <FlameIcon />;
+        case 2: return <AlertIcon />;
+        case 3: return <CircleIcon className="text-blue-500" />;
+        default: return <CircleIcon />;
+      }
+    };
+    
+    const getTierColor = (tier) => {
+      switch(tier) {
+        case 1: return "bg-red-50 border-red-200 hover:bg-red-100";
+        case 2: return "bg-orange-50 border-orange-200 hover:bg-orange-100";
+        case 3: return "bg-blue-50 border-blue-200 hover:bg-blue-100";
+        default: return "bg-gray-50 border-gray-200 hover:bg-gray-100";
+      }
+    };
+    
+    const getDataQualityIcon = (quality) => {
+      switch(quality) {
+        case "strong": return <CheckIcon />;
+        case "medium": return <AlertIcon />;
+        default: return <XIcon />;
+      }
+    };
+    
+    const DataQualityBadge = ({ quality }) => {
+      const config = {
+        strong: { color: "text-green-600 bg-green-50 border-green-200", label: "Strong" },
+        medium: { color: "text-yellow-600 bg-yellow-50 border-yellow-200", label: "Medium" },
+        weak: { color: "text-red-600 bg-red-50 border-red-200", label: "Weak" }
+      };
+      const { color, label } = config[quality] || config.weak;
+      return (
+        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded border text-xs font-medium ${color}`}>
+          {getDataQualityIcon(quality)}
+          {label}
+        </span>
+      );
+    };
+    
+    // Section component
+    const Section = ({ title, children }) => (
+      <div className="bg-white rounded-lg border border-gray-200 mb-3">
+        <div className="px-4 py-2 border-b border-gray-100 bg-gray-50 rounded-t-lg">
+          <h3 className="font-semibold text-sm text-gray-700">{title}</h3>
+        </div>
+        <div className="p-4">{children}</div>
+      </div>
+    );
+    
+    // Account Brief Panel
+    const AccountBrief = ({ account, onClose }) => {
+      if (!account) return null;
+      
+      return (
+        <div className="h-full flex flex-col bg-gray-100">
+          <div className="bg-white border-b border-gray-200 p-4 flex-shrink-0">
+            <div className="flex justify-between items-start">
+              <div className="flex items-center gap-3">
+                <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
+                  <ChevronLeft />
+                </button>
+                <div>
+                  <h1 className="text-lg font-bold">{account.account}</h1>
+                  <div className="text-sm text-gray-500">{account.scenario}</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold">{account.score}</div>
+                <DataQualityBadge quality={account.dataQuality} />
+              </div>
+            </div>
+            <div className="flex gap-4 mt-3 text-xs text-gray-500">
+              <span>{account.industry}</span>
+              <span>•</span>
+              <span>{account.employees} employees</span>
+              <span>•</span>
+              <span>{account.hq}</span>
+            </div>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto p-4">
+            <Section title="Strategic Rationale">
+              <div className="space-y-4">
+                <div className="p-3 bg-red-50 rounded-lg border border-red-100">
+                  <div className="text-xs font-bold text-red-700 mb-1">WHY NOW</div>
+                  <div className="text-sm">{account.whyNow}</div>
+                  <div className="text-xs text-gray-500 mt-2">{account.whyNowSource} • {account.whyNowDate}</div>
+                </div>
+                <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                  <div className="text-xs font-bold text-blue-700 mb-1">WHY GRAFANA</div>
+                  <div className="text-sm">{account.whyGrafana}</div>
+                  <div className="text-xs text-gray-500 mt-2">{account.whyGrafanaSource} • {account.whyGrafanaDate}</div>
+                </div>
+                <div className="p-3 bg-green-50 rounded-lg border border-green-100">
+                  <div className="text-xs font-bold text-green-700 mb-1">WHY ANYTHING</div>
+                  <div className="text-sm">{account.whyAnything}</div>
+                  <div className="text-xs text-gray-500 mt-2">{account.whyAnythingSource} • {account.whyAnythingDate}</div>
+                </div>
+              </div>
+            </Section>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <Section title="Deal Status">
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="text-xs text-gray-500">CRM:</span>
+                    <div className="font-medium">{account.dealStatus.crmStatus}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500">Actual:</span>
+                    <div className="font-medium">{account.dealStatus.actualStatus}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500">Blockers:</span>
+                    <div className="font-medium">{account.dealStatus.keyBlockers}</div>
+                  </div>
+                </div>
+              </Section>
+              
+              <Section title="Tech Stack">
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="text-xs text-gray-500">Current:</span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {account.techStack.current.map((tool, i) => (
+                        <span key={i} className="px-2 py-0.5 bg-gray-100 rounded text-xs">{tool}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500">Displacing:</span>
+                    <div>{account.techStack.displacing}</div>
+                  </div>
+                </div>
+              </Section>
+            </div>
+            
+            <Section title={`Warm Leads (${account.warmLeads.length})`}>
+              <div className="space-y-2">
+                {account.warmLeads.map((lead, i) => (
+                  <div key={i} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+                    <div>
+                      <span className="font-medium text-sm">{lead.name}</span>
+                      <span className="text-gray-500 text-xs ml-2">{lead.title}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-600 max-w-48 truncate">{lead.signal}</span>
+                      <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                        lead.tier === 1 ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'
+                      }`}>T{lead.tier}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {account.coldContacts > 0 && (
+                <div className="mt-3 pt-3 border-t border-gray-200 text-sm">
+                  <span className="text-gray-500">Cold contacts ready:</span>
+                  <span className="font-medium ml-2">{account.coldContacts}</span>
+                  <span className="text-xs text-gray-400 ml-2">({account.coldPersonas.join(", ")})</span>
+                </div>
+              )}
+            </Section>
+            
+            {account.doNotContact && account.doNotContact.length > 0 && (
+              <Section title="Do Not Contact">
+                <div className="space-y-2">
+                  {account.doNotContact.map((contact, i) => (
+                    <div key={i} className="flex items-center justify-between py-1 text-sm">
+                      <span className="font-medium text-red-600">{contact.name}</span>
+                      <span className="text-gray-500 text-xs">{contact.reason}</span>
+                    </div>
+                  ))}
+                </div>
+              </Section>
+            )}
+            
+            {account.gongInsights && account.gongInsights.length > 0 && (
+              <Section title="Gong Insights">
+                <ul className="space-y-1">
+                  {account.gongInsights.map((insight, i) => (
+                    <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                      <span className="text-blue-500">•</span>
+                      <span>"{insight}"</span>
+                    </li>
+                  ))}
+                </ul>
+              </Section>
+            )}
+            
+            {account.risks && account.risks.length > 0 && (
+              <Section title="Risks">
+                <ul className="space-y-1">
+                  {account.risks.map((risk, i) => (
+                    <li key={i} className="text-sm text-red-600 flex items-start gap-2">
+                      <span>⚠️</span>
+                      <span>{risk}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Section>
+            )}
+            
+            <Section title="Next Actions">
+              <div className="space-y-2">
+                {account.nextActions.map((action, i) => (
+                  <div key={i} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+                    <span className="text-sm">{action.action}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500">{action.due}</span>
+                      <span className={`px-2 py-0.5 rounded text-xs font-bold ${
+                        action.priority === 'P0' ? 'bg-red-100 text-red-700' : 
+                        action.priority === 'P1' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-700'
+                      }`}>{action.priority}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Section>
+            
+            <Section title="Data Sources">
+              <div className="grid grid-cols-2 gap-3">
+                {account.dataSources.map((source, i) => (
+                  <div key={i} className="text-sm p-2 bg-gray-50 rounded">
+                    <div className="font-medium">{source.source}</div>
+                    <div className="text-xs text-gray-500">{source.date}</div>
+                    <div className="text-xs text-gray-400">{source.notes}</div>
+                  </div>
+                ))}
+              </div>
+            </Section>
+          </div>
+        </div>
+      );
+    };
+    
+    // Main App
+    function TerritoryOS() {
+      const [selectedAccount, setSelectedAccount] = useState(null);
+      const [tierFilter, setTierFilter] = useState(null);
+      const [searchTerm, setSearchTerm] = useState("");
+      
+      const filteredAccounts = territoryData
+        .filter(a => tierFilter ? a.tier === tierFilter : true)
+        .filter(a => a.account.toLowerCase().includes(searchTerm.toLowerCase()));
+      
+      const tierCounts = territoryData.reduce((acc, a) => {
+        acc[a.tier] = (acc[a.tier] || 0) + 1;
+        return acc;
+      }, {});
+      
+      const selectedAccountData = selectedAccount 
+        ? territoryData.find(a => a.account === selectedAccount)
+        : null;
+      
+      return (
+        <div className="h-screen bg-gray-100 flex">
+          <div className={`${selectedAccount ? 'w-96' : 'flex-1'} flex flex-col border-r border-gray-200 bg-white transition-all duration-300`}>
+            <div className="p-4 border-b border-gray-200 flex-shrink-0">
+              <div className="flex justify-between items-center mb-3">
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900">Territory OS</h1>
+                  <p className="text-xs text-gray-500">Last Updated: Jan 15, 2026 • {territoryData.length} Accounts</p>
+                </div>
+              </div>
+              
+              <div className="relative mb-3">
+                <div className="absolute left-3 top-2.5"><SearchIcon /></div>
+                <input
+                  type="text"
+                  placeholder="Search accounts..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              
+              <div className="flex gap-2">
+                {[1, 2, 3, 4].map(tier => (
+                  <button
+                    key={tier}
+                    onClick={() => setTierFilter(tierFilter === tier ? null : tier)}
+                    className={`flex-1 p-2 rounded-lg border transition-all text-center ${
+                      tierFilter === tier 
+                        ? 'border-gray-900 bg-gray-900 text-white' 
+                        : 'border-gray-200 bg-white hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      {tierFilter !== tier && getTierIcon(tier)}
+                      <span className="text-xs font-semibold">T{tier}</span>
+                    </div>
+                    <div className="text-lg font-bold">{tierCounts[tier] || 0}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {!selectedAccount && (
+              <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 flex gap-6 text-sm flex-shrink-0">
+                <div>
+                  <div className="text-xs text-gray-500">Avg Score</div>
+                  <div className="font-bold">{Math.round(territoryData.reduce((sum, a) => sum + a.score, 0) / territoryData.length)}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Warm Leads</div>
+                  <div className="font-bold">{territoryData.reduce((sum, a) => sum + a.warmLeads.length, 0)}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Cold Ready</div>
+                  <div className="font-bold">{territoryData.reduce((sum, a) => sum + a.coldContacts, 0)}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Strong Data</div>
+                  <div className="font-bold">{territoryData.filter(a => a.dataQuality === 'strong').length}/{territoryData.length}</div>
+                </div>
+              </div>
+            )}
+            
+            <div className="flex-1 overflow-y-auto">
+              {filteredAccounts.map(account => (
+                <div
+                  key={account.rank}
+                  onClick={() => setSelectedAccount(account.account)}
+                  className={`p-3 border-b border-gray-100 cursor-pointer transition-all ${getTierColor(account.tier)} ${
+                    selectedAccount === account.account ? 'border-l-4 border-l-blue-500' : ''
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs text-gray-400">#{account.rank}</span>
+                      {getTierIcon(account.tier)}
+                      <span className="font-semibold text-sm">{account.account}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-lg font-bold">{account.score}</span>
+                      {getDataQualityIcon(account.dataQuality)}
+                      <ChevronRight />
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                    <span>{account.warmLeads.length} warm</span>
+                    {account.coldContacts > 0 && <span>{account.coldContacts} cold</span>}
+                    <span>•</span>
+                    <span className="truncate">{account.nextAction}</span>
+                  </div>
+                  
+                  {!selectedAccount && (
+                    <div className="mt-2 text-xs text-gray-600 line-clamp-2">
+                      <span className="font-semibold text-red-600">NOW:</span> {account.whyNow.substring(0, 100)}...
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            {tierFilter && (
+              <div className="p-2 border-t border-gray-200 flex-shrink-0">
+                <button 
+                  onClick={() => setTierFilter(null)}
+                  className="text-sm text-blue-600 hover:underline"
+                >
+                  ← Show all accounts
+                </button>
+              </div>
+            )}
+          </div>
+          
+          {selectedAccount && (
+            <div className="flex-1">
+              <AccountBrief 
+                account={selectedAccountData} 
+                onClose={() => setSelectedAccount(null)} 
+              />
+            </div>
+          )}
+        </div>
+      );
+    }
+    
+    // Main App Wrapper with Password Gate
+    function App() {
+      const [authenticated, setAuthenticated] = useState(
+        sessionStorage.getItem('territory_auth') === 'true'
+      );
+      
+      if (!authenticated) {
+        return <PasswordGate onSuccess={() => setAuthenticated(true)} />;
+      }
+      
+      return <TerritoryOS />;
+    }
+    
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
