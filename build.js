@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 // Read the summary markdown file
-const summaryPath = path.join(__dirname, '..', 'summary.md');
-const templatePath = path.join(__dirname, '..', 'template.html');
-const outputPath = path.join(__dirname, '..', 'index.html');
+const summaryPath = path.join(__dirname, 'summary.md');
+const templatePath = path.join(__dirname, 'template.html');
+const outputPath = path.join(__dirname, 'index.html');
 
 const summaryContent = fs.readFileSync(summaryPath, 'utf8');
 const templateContent = fs.readFileSync(templatePath, 'utf8');
