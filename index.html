@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Territory Command Center - Grafana SDR OS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      color: #e0e0e0;
+    }
+
+    /* Password Screen */
+    .password-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .password-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .password-box h1 {
+      color: #f97316;
+      margin-bottom: 8px;
+      font-size: 24px;
+    }
+
+    .password-box p {
+      color: #888;
+      margin-bottom: 24px;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+
+    .password-input:focus {
+      outline: none;
+      border-color: #f97316;
+    }
+
+    .password-btn {
+      width: 100%;
+      padding: 12px 24px;
+      background: #f97316;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .password-btn:hover {
+      background: #ea580c;
+    }
+
+    .error-msg {
+      color: #ef4444;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* Dashboard */
+    .dashboard {
+      display: none;
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header h1 {
+      color: #f97316;
+      font-size: 28px;
+    }
+
+    .header-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    .stat-card.tier-1 .stat-value { color: #ef4444; }
+    .stat-card.tier-2 .stat-value { color: #f97316; }
+    .stat-card.tier-3 .stat-value { color: #3b82f6; }
+    .stat-card.nurture .stat-value { color: #22c55e; }
+
+    /* Account Cards */
+    .accounts-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .account-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .account-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .account-card.tier-1 { border-left: 4px solid #ef4444; }
+    .account-card.tier-2 { border-left: 4px solid #f97316; }
+    .account-card.tier-3 { border-left: 4px solid #3b82f6; }
+    .account-card.tier-nurture { border-left: 4px solid #22c55e; }
+
+    .card-collapsed {
+      padding: 20px;
+      cursor: pointer;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .account-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .account-score {
+      font-size: 24px;
+      font-weight: 700;
+      color: #f97316;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tier-badge, .status-badge, .freshness-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .tier-badge.tier-1 { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .tier-badge.tier-2 { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+    .tier-badge.tier-3 { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+    .tier-badge.tier-nurture { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+
+    .status-badge {
+      background: rgba(255, 255, 255, 0.1);
+      color: #9ca3af;
+    }
+
+    .freshness-badge.freshness-high { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .freshness-badge.freshness-medium { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+    .freshness-badge.freshness-low { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #f97316;
+      margin-bottom: 8px;
+    }
+
+    .angle-section {
+      margin-bottom: 16px;
+    }
+
+    .angle-text {
+      font-size: 15px;
+      color: #e0e0e0;
+      line-height: 1.5;
+      font-style: italic;
+      padding-left: 12px;
+      border-left: 2px solid #f97316;
+    }
+
+    .signals-section {
+      margin-bottom: 12px;
+    }
+
+    .signals-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .signal-tag {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #f87171;
+    }
+
+    .blocker-banner {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #fca5a5;
+      margin-top: 12px;
+    }
+
+    .expand-hint {
+      text-align: center;
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Expanded Card */
+    .card-expanded {
+      display: none;
+      padding: 0 20px 20px 20px;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .account-card.expanded .card-expanded {
+      display: block;
+    }
+
+    .account-card.expanded .expand-hint {
+      display: none;
+    }
+
+    .three-whys-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .why-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .why-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #f97316;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .why-content {
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .why-source {
+      font-size: 11px;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .detail-section {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .detail-section.warning {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .detail-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+
+    .detail-section.warning .detail-label {
+      color: #fca5a5;
+    }
+
+    .detail-content {
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+
+    .contacts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .contact-item {
+      font-size: 12px;
+      color: #a5b4fc;
+    }
+
+    .collapse-hint {
+      text-align: center;
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+    }
+
+    .collapse-hint:hover {
+      color: #9ca3af;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .three-whys-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .card-header {
+        flex-direction: column;
+      }
+      
+      .card-title {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Password Screen -->
+  <div class="password-screen" id="passwordScreen">
+    <div class="password-box">
+      <h1>🎯 Territory Command Center</h1>
+      <p>Enter password to access</p>
+      <input type="password" class="password-input" id="passwordInput" placeholder="Password" onkeypress="if(event.key==='Enter')checkPassword()">
+      <button class="password-btn" onclick="checkPassword()">Access Dashboard</button>
+      <p class="error-msg" id="errorMsg">Incorrect password</p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard" id="dashboard">
+    <div class="header">
+      <div>
+        <h1>🎯 Territory Command Center</h1>
+        <div class="header-meta">Duc Le | Last Updated: 2026-01-16</div>
+      </div>
+      <div class="header-meta">12 accounts</div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card tier-1">
+        <div class="stat-value">6</div>
+        <div class="stat-label">🔥 Tier 1</div>
+      </div>
+      <div class="stat-card tier-2">
+        <div class="stat-value">4</div>
+        <div class="stat-label">🔶 Tier 2</div>
+      </div>
+      <div class="stat-card tier-3">
+        <div class="stat-value">1</div>
+        <div class="stat-label">🔷 Tier 3</div>
+      </div>
+      <div class="stat-card nurture">
+        <div class="stat-value">1</div>
+        <div class="stat-label">🌱 Nurture</div>
+      </div>
+    </div>
+
+    <div class="accounts-container">
+      
+      <div class="account-card tier-1" data-index="0">
+        <div class="card-collapsed" onclick="toggleCard(0)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">Jack Henry & Associates</span>
+              <span class="account-score">100</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-1">🔥 T1</span>
+              <span class="status-badge">Active sequence</span>
+              <span class="freshness-badge freshness-high">HIGH</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"Platform team building observability blueprints for dev teams — one standard beats 6 tools during incidents"</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 Enterprise Trial INBOUND (Jan 14)</span><span class="signal-tag">🔥 6 warm leads active (Jan 2026)</span><span class="signal-tag">🔥 SRE hiring OTel/SLO (Jan 2026)</span><span class="signal-tag">🔥 K8s 5/5 intensity</span></div>
+          </div>
+
+          
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-0">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">Trial started yesterday + SRE hiring + IDP build = buying window open</div>
+              <div class="why-source">CSV + ChatAE Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">6 tools creating context-switching during incidents (Datadog, Honeycomb, Prometheus, Splunk)</div>
+              <div class="why-source">ChatAE + HG Data Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">99.999% uptime target for financial services. 100+ microservices = incident correlation complexity.</div>
+              <div class="why-source">ChatAE Jan 2026</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">Uptime SLA compliance + reduced MTTR + faster dev onboarding</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Scott Sayles (k6 heavy, pricing)</div><div class="contact-item">👤 Rick Windham (148 hrs, Enterprise Trial)</div><div class="contact-item">👤 Reddy Preetham (Cloud Trial Jan 14)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">6+ tool sprawl - Datadog, Honeycomb, Prometheus, Splunk, Grafana OSS</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">None - all signals from Jan 2026</div>
+            </div>
+            
+            
+            
+            <div class="detail-section">
+              <div class="detail-label">OUTREACH TIMING</div>
+              <div class="detail-content">Started: 2026-01-15 | Revisit: 2026-03-01</div>
+            </div>
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(0)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-1" data-index="1">
+        <div class="card-collapsed" onclick="toggleCard(1)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">Generac Power Systems</span>
+              <span class="account-score">95</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-1">🔥 T1</span>
+              <span class="status-badge">Active sequence</span>
+              <span class="freshness-badge freshness-medium">MEDIUM</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"IoT platform scaling faster than team capacity — 6 overlapping tools means engineers context-switch during every incident"</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 SRE hiring Denver (Jan 2026)</span><span class="signal-tag">🔥 $125M tariff pressure</span><span class="signal-tag">🔥 New CIO 22mo + CTO 20mo</span><span class="signal-tag">🔥 6 warm leads with trials</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ Ken Steinfeldt said "pricing too high" - DO NOT CONTACT</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-1">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">New CIO + CTO need transformation wins. $125M tariff pressure demands consolidation math. 8 months since deal lost = budget cycle reset.</div>
+              <div class="why-source">ChatAE Jan 2026, Gong May 2025</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">6 overlapping tools (Splunk, Datadog, Dynatrace, New Relic, Azure Monitor x2). Self-host preference. Champion quote: "unlocking features we know we want."</div>
+              <div class="why-source">ChatAE Jan 2026, Gong May 2025</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">IoT platform (PowerInsights) scaling faster than team capacity. "Net zero for leadership" = needs savings math. Device telemetry = high-cardinality metrics.</div>
+              <div class="why-source">Gong May 2025 (8mo old)</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">Tool consolidation ROI (net zero math) + IoT telemetry at scale + capacity gap solved without headcount</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Devyn Cunningham (champion, k6)</div><div class="contact-item">👤 Joe Kolbach (Eng Manager, ObservabilityCON)</div><div class="contact-item">👤 Thomas Laubenstein (Cloud Trial, k6)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">Splunk, Datadog, Dynatrace, New Relic, Azure Monitor x2 - massive overlap</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">Gong context 8 months old. "End of July" deadline likely passed. Revalidate current timeline.</div>
+            </div>
+            
+            
+            
+            <div class="detail-section">
+              <div class="detail-label">OUTREACH TIMING</div>
+              <div class="detail-content">Started: 2026-01-15 | Revisit: 2026-03-01</div>
+            </div>
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(1)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-1" data-index="2">
+        <div class="card-collapsed" onclick="toggleCard(2)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">Sweetwater</span>
+              <span class="account-score">92</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-1">🔥 T1</span>
+              <span class="status-badge">Warm emails sent</span>
+              <span class="freshness-badge freshness-high">HIGH</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"Platform team managing K8s, CI/CD, logging — engineering hours going to infrastructure instead of features"</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 Chris Rottinger 130 hrs + pricing page</span><span class="signal-tag">🔥 Ryand McGuire NetFlow docs (Jan 8)</span><span class="signal-tag">🔥 15 contacts with behavioral data</span><span class="signal-tag">🔥 Multiple pricing views</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ Chris Groleau ghosted after database angle - use different angle</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-2">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">15 contacts actively researching. Pricing page views = evaluation mode. Platform team scaling with microservices migration.</div>
+              <div class="why-source">CSV Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">Existing customer ($18K ARR, k6 only). Datadog 2/5 = light footprint, low switching friction. Gong confirms Datadog "expensive."</div>
+              <div class="why-source">CRM + HG Data Jan 2026, Gong Nov 2025</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">Microservices migration (monolith to microservices). Platform Engineering managing K8s, CI/CD, logging. CIO rebuilt CRM + warehouse in-house = build culture.</div>
+              <div class="why-source">ChatAE Jan 2026</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">Engineering hours reclaimed + platform team productivity + infrastructure maintenance offloaded</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Chris Rottinger (Dir IT Eng, 130 hrs)</div><div class="contact-item">👤 Ryand McGuire (Mgr Platform Eng)</div><div class="contact-item">👤 Aaron Dills (Tech Lead, Loki research)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">Datadog 2/5 (light, "expensive"), Prometheus OSS (self-hosted)</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">None - behavioral + ChatAE current</div>
+            </div>
+            
+            
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(2)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-1" data-index="3">
+        <div class="card-collapsed" onclick="toggleCard(3)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">Cision</span>
+              <span class="account-score">88</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-1">🔥 T1</span>
+              <span class="status-badge">Warm emails sent</span>
+              <span class="freshness-badge freshness-medium">MEDIUM</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"OSS Loki migration failed after 14 months — still on Elasticsearch 5/5. Cloud solves the operational burden that broke self-manage."</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 NEW team evaluating (not 2023 people)</span><span class="signal-tag">🔥 Kamlesh 36 pages k6/Loki</span><span class="signal-tag">🔥 Sunil 7 hrs Cloud trial</span><span class="signal-tag">🔥 Staff SRE hiring</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ None - different team evaluating</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-3">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">Different team than 2023 closed-lost = no baggage. Activity within 7 days. OSS approach shifted to Cloud trial evaluation.</div>
+              <div class="why-source">CSV Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">OSS Loki migration FAILED - still Elasticsearch 5/5 after 14 months. Successfully exited Datadog (now 1/5) = proves they CAN migrate.</div>
+              <div class="why-source">Gong Nov 2023 (hypothesis), HG Data Jan 2026 (validation)</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">Wanted to "go all in" on Grafana stack (Loki + Mimir). 99.5% uptime SLA commitment. Staff SRE hiring = scaling team.</div>
+              <div class="why-source">Gong Nov 2023, ChatAE Jan 2026</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">SLA compliance (99.5% uptime) + Staff SRE time on reliability not infrastructure + Elastic migration unblocked</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Kamlesh M (36 pages, k6/Loki)</div><div class="contact-item">👤 Sunil CK (7 hrs trial)</div><div class="contact-item">👤 Mark Willcocks (2023 decision maker)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">Elasticsearch 5/5 (migration target), Datadog 1/5 (successfully exited)</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">Gong quotes 26 months old (Nov 2023). BUT: HG Data validates Elastic still 5/5 = migration still failed.</div>
+            </div>
+            
+            
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(3)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-1" data-index="4">
+        <div class="card-collapsed" onclick="toggleCard(4)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">AbbVie</span>
+              <span class="account-score">82</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-1">🔥 T1</span>
+              <span class="status-badge">Warm emails sent (10 contacts)</span>
+              <span class="freshness-badge freshness-medium">MEDIUM</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"Splunk + ServiceNow integration is "next phase" — Grafana as unified visualization layer across tool sets"</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 Tommie Carter logged in (Jan 13)</span><span class="signal-tag">🔥 Julius Popoola Loki/Alloy research</span><span class="signal-tag">🔥 5 re:Invent booth scans (Dec 2025)</span><span class="signal-tag">🔥 Jeff Ames Inbound (Feb 2025)</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ Paul Burke said "not interested" - DO NOT CONTACT</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-4">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">Champion (Tommie) still active. On-Prem deal PAUSED on firewall, not rejected. 5 booth scans at re:Invent = continued interest.</div>
+              <div class="why-source">CSV Jan 2026, Gong Feb-Sep 2025</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">Champion had budget line item. Quote: "tie all tool sets into single view." 60-user pack previously approved. Splunk/Cribl for SIEM = Grafana as viz layer.</div>
+              <div class="why-source">Gong Jul-Sep 2025</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">"Next two phases is ServiceNow integration and Splunk integration." Platform Engineering hiring. Incident Command Center with MTTR tracking.</div>
+              <div class="why-source">Gong Jul 2025, ChatAE Jan 2026</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">Single pane across Splunk/ServiceNow + MTTR improvement (ICC tracking) + firewall blocker bypassed via Cloud</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Tommie Carter (champion, budget holder)</div><div class="contact-item">👤 Jeff Ames (Inbound, 60-user pack)</div><div class="contact-item">👤 Thomas Zampetti (Hybrid Cloud, re:Invent)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">Splunk (SIEM), Cribl, Datadog, Dynatrace, PagerDuty</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">Gong buyer quotes 4-8 months old. Champion (Tommie) still active = context likely still valid.</div>
+            </div>
+            
+            
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(4)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-1" data-index="5">
+        <div class="card-collapsed" onclick="toggleCard(5)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">ActiveCampaign</span>
+              <span class="account-score">80</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-1">🔥 T1</span>
+              <span class="status-badge">Warm emails sent (4 contacts)</span>
+              <span class="freshness-badge freshness-medium">MEDIUM</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"Self-hosted Loki delivered 73% savings — now exploring Cloud-only features (AI obs, ML forecasting) they can't get from OSS"</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 12 active Cloud users daily</span><span class="signal-tag">🔥 Intent signal "researching observability" (Jan 6)</span><span class="signal-tag">🔥 New CPO June 2025</span><span class="signal-tag">🔥 Sukanya Cloud-only features research</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ Don't lead with TCO (backfired before). Lead with Cloud-only features.</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-5">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">12 users logging in daily despite being "churned." Intent signal Jan 6. New CPO = fresh eyes. Researching Cloud-only features (AI, ML, k6).</div>
+              <div class="why-source">CSV + ZoomInfo Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">Self-hosted Loki = 73% cost savings (their public blog). Churn was BUDGET not product fit. Gladson George authored case study.</div>
+              <div class="why-source">Public Blog Feb 2023, Gong Jan 2024</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">Managing LGTM stack in-house = operational overhead. Still running Datadog 2/5, New Relic 2/5. CFO lockdown may have eased after 2+ years.</div>
+              <div class="why-source">Blog Feb 2023, HG Data Jan 2026</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">Cloud-only features (AI/ML forecasting) + operational overhead eliminated + proven 73% savings extended</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Gladson George (Dir Platform Eng, authored blog)</div><div class="contact-item">👤 Sukanya Sengupta (Cloud-only research)</div><div class="contact-item">👤 Shawn Saavedra (Sr SRE Mgr)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">Datadog 2/5, New Relic 2/5, Opsgenie - still paying for overlap</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">Blog/Gong 24-35 months old. BUT: Current behavior (Jan 2026) validates continued interest. 73% is their own published claim.</div>
+            </div>
+            
+            
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(5)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-2" data-index="6">
+        <div class="card-collapsed" onclick="toggleCard(6)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">Zoro.com</span>
+              <span class="account-score">76</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-2">🔶 T2</span>
+              <span class="status-badge">Warm emails sent (15 contacts)</span>
+              <span class="freshness-badge freshness-low">LOW</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"Engineering scaled 6 to 150+ — self-hosted Grafana maintenance now competes with platform team's ability to ship features"</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 Danny Seeger 611 pages (8 days ago)</span><span class="signal-tag">🔥 Sufan Huang Cloud trial active</span><span class="signal-tag">🔥 15 warm leads</span><span class="signal-tag">🔥 TCO research (Timothy 73 pages pricing)</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ 2 active AE opps - coordinate with John Garlick. Giovanni "not interested" - DO NOT CONTACT.</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-6">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">Danny Seeger researching heavily (8 days ago). Cloud trial = evaluating managed. Engineering scaled dramatically (6 to 150+).</div>
+              <div class="why-source">CSV Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">Already self-hosted Grafana OSS users (274-441 hrs usage). Cloud trial = natural upgrade path. Not a competitor displacement.</div>
+              <div class="why-source">CSV Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">HYPOTHESIS - no Gong to confirm. 15-20M SKUs = high-cardinality metrics. Platform teams managing observability. Microservices migration.</div>
+              <div class="why-source">Account research (not buyer quotes)</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">Platform team capacity reclaimed + build vs buy ROI + high-cardinality metrics handled</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Danny Seeger (611 pages, 8 days ago)</div><div class="contact-item">👤 Sufan Huang (Cloud trial)</div><div class="contact-item">👤 Mariyam Haji (274 hrs, Loki focus)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">Datadog (active), Grafana OSS (self-hosted)</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">No ChatAE triggers. No Gong. "Why ANYTHING" is 100% hypothesis.</div>
+            </div>
+            
+            
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(6)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-2" data-index="7">
+        <div class="card-collapsed" onclick="toggleCard(7)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">Stifel</span>
+              <span class="account-score">76</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-2">🔶 T2</span>
+              <span class="status-badge">Warm sent + Cold ready</span>
+              <span class="freshness-badge freshness-medium">MEDIUM</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"$1M Datadog + New Relic spend they explicitly want to exit — "take it to the next level of enterprise monitoring""</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 $250K deal ON HOLD (not lost)</span><span class="signal-tag">🔥 Sr Obs Engineer hiring (Jan 2026)</span><span class="signal-tag">🔥 "2026+ roadmap" planning</span><span class="signal-tag">🔥 Scott Stevens re:Invent (Dec 5)</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ Isaac Hann + John Haas left company - DO NOT CONTACT</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-7">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">Deal ON HOLD for team restructure, not rejected. Chris Malone: "mid-Nov follow-up" window passed. 2026 roadmap planning active.</div>
+              <div class="why-source">Gong Jul-Oct 2025, ChatAE Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">$1M Datadog + New Relic spend they want to exit. Moog/AIOps has "minimal dashboard capability." K8s 5/5.</div>
+              <div class="why-source">Gong Jul-Oct 2025, HG Data Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">Tool consolidation mandate. "Take it to the next level of an enterprise monitoring system." 5+ fragmented tools. Record Q3 ($1.43B revenue).</div>
+              <div class="why-source">Gong Sep 2025, ChatAE Jan 2026</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">$1M tool spend reduced + enterprise monitoring standardization + vendor lock-in avoided</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Chris Malone (Mgr IT Ops, decision maker)</div><div class="contact-item">👤 Devin Davis-Baker (Obs Engineer)</div><div class="contact-item">👤 Mark Kenyon (Dir Cloud Strategy)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">Datadog (~$1M), New Relic, Moog/AIOps, CloudWatch, Splunk, PagerDuty</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">Gong quotes 3-6 months old. "Mid-Nov follow-up" window passed. 2 champions (Isaac, John) left company = team rebuild.</div>
+            </div>
+            
+            
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(7)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-2" data-index="8">
+        <div class="card-collapsed" onclick="toggleCard(8)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">Zebra Technologies</span>
+              <span class="account-score">74</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-2">🔶 T2</span>
+              <span class="status-badge">Warm sent, Cold pending</span>
+              <span class="freshness-badge freshness-low">LOW</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"Embedding Grafana into consumer-facing product — "prefer to utilize services like Grafana to go to market quickly""</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 6 contacts with 453+ pages research</span><span class="signal-tag">🔥 Deal PAUSED (licensing), not lost</span><span class="signal-tag">🔥 $120M cost savings initiative</span><span class="signal-tag">🔥 Cloud migration active</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ Licensing model mismatch - need OEM/per-device pricing, not per-user. Check with AE if pricing changed.</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-8">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">Deal was PAUSED on licensing model, not product fit. They WANT Grafana. $120M cost initiative. Cloud migration creating pressure.</div>
+              <div class="why-source">CSV Jan 2026, Gong Sep 2024, ChatAE Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">Quote: "prefer to utilize services like Grafana to embed dashboards and go to market quickly." Already replacing Sumo Logic with Loki.</div>
+              <div class="why-source">Gong Mar 2024 (22mo old)</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">Embedding Grafana into consumer-facing product. 70% margin threshold for software. $6/device/year business model. OEM licensing needed.</div>
+              <div class="why-source">Gong Mar 2024 (22mo old)</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">Time-to-market + 70% margin preserved + OEM/embedded product enablement</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Kanagal Ramaswamy (PM, pricing discussions)</div><div class="contact-item">👤 pradeeppm.kumar (453 pages)</div><div class="contact-item">👤 Andy Peckys (SRE Lead, trial 2024)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">Sumo Logic (being replaced), OpsRamp</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">Gong context 21-22 months old. Business model (70% margin, $6/device) may have shifted. Check if OEM pricing has changed.</div>
+            </div>
+            
+            
+            
+            <div class="detail-section">
+              <div class="detail-label">OUTREACH TIMING</div>
+              <div class="detail-content">Started: 2026-01-13 | Revisit: 2026-02-27</div>
+            </div>
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(8)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-2" data-index="9">
+        <div class="card-collapsed" onclick="toggleCard(9)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">EMC Insurance</span>
+              <span class="account-score">72</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-2">🔶 T2</span>
+              <span class="status-badge">Ready to send (Tom Gass)</span>
+              <span class="freshness-badge freshness-high">HIGH</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"Non-prod success, production rollout 3-4 months overdue — what's blocking the expansion?"</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 Tom Gass Gartner IOCS (Jan 5)</span><span class="signal-tag">🔥 Alex Deaver activity (Jan 12)</span><span class="signal-tag">🔥 Production rollout overdue</span><span class="signal-tag">🔥 SolarWinds $31K displacement</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ AE managing David/Alex/Brandon/Josh - coordinate before contacting. Safal Magar declined LinkedIn.</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-9">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">Production rollout was targeted Oct/Nov 2025, now 3-4 months late. Tom Gass at Gartner event = active evaluation. Dec 2 call happened after "closed-lost."</div>
+              <div class="why-source">ZoomInfo Jan 2026, CSV Jan 2026, CRM Dec 2025</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">Already customer - deploying Grafana + Prometheus to non-prod. SolarWinds displacement ($31K/yr). PagerDuty replacement interest (OnCall).</div>
+              <div class="why-source">CRM Dec 2, 2025</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">500+ licenses needed (including business users). 700-1,000 hosts across AWS + on-prem. SolarWinds migration goal by end 2026. Guidewire Cloud on AWS.</div>
+              <div class="why-source">CRM Dec 2025, ChatAE Jan 2026</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">$31K SolarWinds cost eliminated + production deployment unblocked + 500+ user expansion</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Tom Gass (Dir Tech Ops, Gartner event)</div><div class="contact-item">👤 David Riddle (Sr Platform Eng, 1030 pages)</div><div class="contact-item">👤 Alex Deaver (Platform Eng, Jan 12 activity)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">SolarWinds ($31K, migrating FROM), PagerDuty (replacement interest)</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">CRM notes 6 weeks old. Behavioral + ChatAE current. Most recent context in territory.</div>
+            </div>
+            
+            
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(9)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-3" data-index="10">
+        <div class="card-collapsed" onclick="toggleCard(10)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">Kraft Heinz</span>
+              <span class="account-score">52</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-3">🔷 T3</span>
+              <span class="status-badge">HOLD - Demo end of Jan</span>
+              <span class="freshness-badge freshness-low">LOW</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"TBD after demo - need Gong to validate pain points"</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 Florentin Zlatea demo scheduled (end Jan)</span><span class="signal-tag">🔥 Gabriel dos Santos Ferreira Inbound + Pricing + Trial (Feb 2025)</span><span class="signal-tag">🔥 K8s 5/5</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ HOLD - Do not multi-thread before demo outcome. Gate date: Feb 1, 2026.</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-10">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">Demo scheduled end of Jan with Florentin Zlatea. CFO cost discipline focus. Company spin-off late 2026.</div>
+              <div class="why-source">ChatAE Q3 2025, CSV Feb 2025</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">K8s 5/5 intensity. Multi-vendor sprawl: New Relic 2/5, Datadog 1/5, Azure App Insights 1/5, Azure Managed Grafana 1/5.</div>
+              <div class="why-source">HG Data Jan 2026</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">HYPOTHESIS - No confirmed pain point. Inbound request (Feb 2025) never converted. Multiple trials went cold. No Gong.</div>
+              <div class="why-source">No confirmed source</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">TBD after demo - need Gong to validate pain points</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 Florentin Zlatea (Enterprise Architect, demo scheduled)</div><div class="contact-item">👤 Gabriel dos Santos Ferreira (Inbound + pricing)</div><div class="contact-item">👤 Seth Manley (Inbound Aug 2025)</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">New Relic 2/5, Datadog 1/5, Azure App Insights, Azure Managed Grafana (already using)</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">Gabriel's signals 11 months old (Feb 2025). Florentin engaged now. No Gong = "Why ANYTHING" is pure hypothesis.</div>
+            </div>
+            
+            
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(10)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+
+      <div class="account-card tier-nurture" data-index="11">
+        <div class="card-collapsed" onclick="toggleCard(11)">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="account-name">Motorola Solutions</span>
+              <span class="account-score">45</span>
+            </div>
+            <div class="card-meta">
+              <span class="tier-badge tier-nurture">🌱 TNurture</span>
+              <span class="status-badge">Product gap (AU/EU regions)</span>
+              <span class="freshness-badge freshness-medium">MEDIUM</span>
+            </div>
+          </div>
+          
+          <div class="angle-section">
+            <div class="section-label">RECOMMENDED ANGLE</div>
+            <div class="angle-text">"Re-engage when Grafana adds regional coverage"</div>
+          </div>
+          
+          <div class="signals-section">
+            <div class="section-label">KEY SIGNALS</div>
+            <div class="signals-list"><span class="signal-tag">🔥 Product gap - Grafana doesn't support AU/EU regions they need</span></div>
+          </div>
+
+          <div class="blocker-banner">⚠️ PRODUCT GAP - Grafana doesn't support AU/EU regions. AE (Libby) - pending confirmation.</div>
+          
+          <div class="expand-hint">Click to expand details ▼</div>
+        </div>
+        
+        <div class="card-expanded" id="expanded-11">
+          <div class="three-whys-grid">
+            <div class="why-card">
+              <div class="why-header">WHY NOW</div>
+              <div class="why-content">Product gap blocking deal. Internal platform consolidation interest exists but can't proceed.</div>
+              <div class="why-source">Gong</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY GRAFANA</div>
+              <div class="why-content">Strong tech stack fit. Internal consolidation initiative.</div>
+              <div class="why-source">Gong</div>
+            </div>
+            <div class="why-card">
+              <div class="why-header">WHY ANYTHING</div>
+              <div class="why-content">Regional coverage requirements for AU/EU operations.</div>
+              <div class="why-source">Gong</div>
+            </div>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-section">
+              <div class="detail-label">OUTCOME FOCUS</div>
+              <div class="detail-content">Re-engage when Grafana adds regional coverage</div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">TOP CONTACTS</div>
+              <div class="detail-content contacts-list"><div class="contact-item">👤 TBD when product gap resolved</div></div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-label">COMPETITIVE LANDSCAPE</div>
+              <div class="detail-content">Unknown</div>
+            </div>
+            
+            
+            <div class="detail-section warning">
+              <div class="detail-label">⚠️ DATA WARNING</div>
+              <div class="detail-content">Product gap is the blocker, not timing or budget.</div>
+            </div>
+            
+            
+            
+          </div>
+          
+          <div class="collapse-hint" onclick="toggleCard(11)">Click to collapse ▲</div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+
+  <script>
+    const CORRECT_PASSWORD = 'NorthCentral';
+
+    function checkPassword() {
+      const input = document.getElementById('passwordInput').value;
+      const errorMsg = document.getElementById('errorMsg');
+
+      if (input === CORRECT_PASSWORD) {
+        sessionStorage.setItem('authenticated', 'true');
+        showDashboard();
+      } else {
+        errorMsg.style.display = 'block';
+        document.getElementById('passwordInput').value = '';
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('passwordScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }
+
+    function toggleCard(index) {
+      const card = document.querySelector(`.account-card[data-index="${index}"]`);
+      card.classList.toggle('expanded');
+    }
+
+    // Check if already authenticated
+    if (sessionStorage.getItem('authenticated') === 'true') {
+      showDashboard();
+    }
+  </script>
+
+</body>
+</html>
