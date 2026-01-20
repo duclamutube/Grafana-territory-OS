@@ -1,8 +1,8 @@
 # Territory Summary
 
-**Last Updated:** 2026-01-16
+**Last Updated:** 2026-01-19
 **SDR:** Duc Le
-**Total Accounts:** 11
+**Total Accounts:** 12
 **Audit Status:** Complete - All accounts validated
 
 ---
@@ -116,6 +116,28 @@
 
 ---
 
+### 1898 & Co.
+- Score: 74
+- Tier: 2
+- Status: Warm reply follow-up
+- Outreach Start: 2026-01-19
+- Revisit: 2026-03-05
+- Angle: $250K Datadog renewal in 2 months - Loki for bulk log parsing without duplication
+- Signals: Warm reply (Jan 19) | $250K Datadog renewal Mar 26 | "Halved cloud bill" already (Gong Oct 2025)
+- Why NOW: $250K Datadog contract renewal March 26, 2026 (~2 months). Evaluating Loki as logging alternative before renewal decision. Already "halved cloud bill" = actively seeking more cost reduction.
+- Why NOW Source: Gong Oct 2025, Reply Jan 2026
+- Why GRAFANA: Specific Loki use case: "bulk log data, rapid parsing" for edge K8s clusters. K8s standardization complete (HAOS on k3s). Self-hosted Elastic preference = open to OSS-friendly approach.
+- Why GRAFANA Source: Gong Oct 2025, ChatAE Oct 2025
+- Why ANYTHING: $250K/year observability spend locked in Datadog. Duplication problem: can't separate metrics from logs without paying twice. Needs logging solution that complements, not duplicates, existing stack.
+- Why ANYTHING Source: Gong Oct 2025
+- Outcome: $250K Datadog cost reduction + bulk log parsing without duplication + edge K8s observability
+- Data Freshness: HIGH
+- Data Warning: Skeptical prospect ("not a huge opportunity" per AE) - handle carefully
+- Top Contacts: Warm reply contact | Edge K8s team
+- Competitive: Datadog $250K/yr, self-hosted Elastic
+
+---
+
 ### Stifel
 - Score: 76
 - Tier: 2
@@ -146,15 +168,15 @@
 - Revisit: 2026-03-01
 - Angle: Platform team building observability blueprints - need one standard before IDP locks in
 - Signals: Cloud Trial active (Reddy) | k6 usage (Scott) | SRE hiring OTel/SLO
-- Why NOW: Cloud Trial started. SRE hiring with OTel/SLO focus. Platform Engineering building IDP = standardization decision imminent. NOTE: Rick Windham "Inbound" was URL reset support ticket - DISQUALIFIED.
-- Why NOW Source: CSV Jan 2026
-- Why GRAFANA: 6+ observability tools creating context-switching during incidents. Platform team building "observability blueprints for dev teams" = needs single standard.
-- Why GRAFANA Source: ChatAE + Tech Stack Jan 2026
-- Why ANYTHING: HYPOTHESIS - 99.999% uptime target. 100+ microservices. No Gong to validate pain points.
-- Why ANYTHING Source: ChatAE Jan 2026 - NOT buyer-validated
-- Outcome: Uptime SLA compliance + reduced MTTR + developer onboarding speed
-- Data Freshness: LOW
-- Data Warning: No Gong. Rick Windham inbound was support ticket (URL reset) - DISQUALIFIED. Why ANYTHING is hypothesis. Score adjusted 100 to 75.
+- Why NOW: Internal Developer Platform (IDP) initiative = building observability blueprints. SRE role hiring (OTel, SLO focus). Cloud Trial active.
+- Why NOW Source: ChatAE Jan 2026, CSV Jan 2026
+- Why GRAFANA: Already Cloud Trial user. k6 usage. 6+ tools fragmented (Datadog, Honeycomb, Prometheus, Splunk). Quote context needed.
+- Why GRAFANA Source: CSV Jan 2026, HG Data Jan 2026
+- Why ANYTHING: Platform team building observability standards. "Blueprints" approach = want one standard before IDP locks in tooling.
+- Why ANYTHING Source: ChatAE Jan 2026
+- Outcome: IDP observability standard locked in + tool fragmentation solved + platform team productivity
+- Data Freshness: HIGH
+- Data Warning: Rick Windham DISQUALIFIED (support ticket) - DO NOT CONTACT.
 - Top Contacts: Sridhar Reddy (Cloud Trial) | Scott (k6 usage) | Max (eng leader)
 - Competitive: Datadog, Honeycomb, Prometheus, Splunk - 6+ tools fragmented
 
@@ -270,7 +292,7 @@
 
 ---
 
-## Audit Log (Jan 16, 2026)
+## Audit Log (Jan 19, 2026)
 
 | Account | Old | New | Change | Finding |
 |---------|-----|-----|--------|---------|
@@ -278,6 +300,7 @@
 | Kraft Heinz | 52 | 34 | -18 | Both inbounds were DELETE/support requests |
 | Zoro | 78 | 68 | -10 | No Gong/ChatAE = hypothesis |
 | Zebra | 74 | 65 | -9 | Gong 22mo = hypothesis |
+| 1898 & Co. | NEW | 74 | +74 | Warm reply + $250K Datadog renewal Mar 26 |
 
 ---
 
