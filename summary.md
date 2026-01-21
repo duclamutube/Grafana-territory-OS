@@ -32,26 +32,28 @@
 ### Sweetwater
 - Score: 92
 - Tier: 1
-- Status: Active sequence
+- Status: Active sequence - FU #2 due
 - Outreach Start: 2026-01-13
 - Revisit: 2026-02-27
-- Angle: Existing k6 customer - microservices migration creating complexity Datadog can't handle cheaply
-- Signals: Chris Rottinger 130 hrs + pricing (Jan 2026) | Ryand McGuire NetFlow docs (Jan 8) | Calista 151 hrs
+- Angle: Existing k6 customer ($18K ARR) - microservices migration creating complexity Datadog can't handle cheaply
+- Signals: Chris Rottinger 130 hrs + pricing (Jan 2026) | Ryand McGuire NetFlow docs (Jan 8) | Calista 151 hrs | Ian reply confirmed Datadog + API Tormentor (Jan 15)
 - Why NOW: Microservices migration creating distributed systems complexity. Platform Eng team managing K8s, CI/CD, logging = infrastructure maintenance competes with feature work. Multiple pricing page views = active evaluation.
 - Why NOW Source: CSV Jan 2026, ChatAE Jan 2026
-- Why GRAFANA: Existing customer ($18K ARR, k6 only). Datadog 2/5 = low switching friction. Datadog confirmed "expensive."
-- Why GRAFANA Source: CRM + HG Data Jan 2026, Gong Nov 2025
-- Why ANYTHING: Microservices migration (monolith to microservices) creating distributed systems complexity. Platform Engineering team managing K8s, CI/CD, logging. CIO build culture.
-- Why ANYTHING Source: ChatAE Jan 2026
-- Outcome: Engineering hours reclaimed + platform team productivity + infrastructure maintenance offloaded
+- Why GRAFANA: Existing customer ($18K ARR, k6 only) = proven value, expansion not net-new. Datadog confirmed "expensive" + confirmed Datadog for observability (Ian reply Jan 2026). Datadog 2/5 = low switching friction.
+- Why GRAFANA Source: CRM + HG Data Jan 2026, Gong Nov 2025, Ian reply Jan 2026
+- Why ANYTHING: API Tormentor (in-house load tester) confirms build culture = willing to invest eng hours in custom tooling. Microservices migration = need observability for services they didn't have before.
+- Why ANYTHING Source: Ian reply Jan 2026, ChatAE Jan 2026
+- Outcome: Engineering hours reclaimed from infrastructure maintenance + platform team productivity on features not tooling + distributed systems visibility
 - Data Freshness: HIGH
-- Top Contacts: Chris Rottinger (pricing signal) | Ryand McGuire (NetFlow) | Calista Helinski (high activity)
-- Competitive: Datadog 2/5 - confirmed expensive
+- New Intel (Jan 20): Ian Gongwer replied - his team (Inbound) doesn't use k6, uses API Tormentor (in-house) + Datadog. Confirms build culture + Datadog displacement opportunity. Thread closed professionally.
+- Cold Outbound: Not recommended - 54% org coverage (15/28), no persona gaps, CIO = DNC
+- Top Contacts: Chris Rottinger (pricing signal) | Ryand McGuire (Platform Eng Mgr, NetFlow) | Calista Helinski (151 hrs)
+- Competitive: Datadog 2/5 (confirmed expensive), API Tormentor (in-house load tester)
 
 ---
 
 ### Cision
-- Score: 88
+- Score: 85
 - Tier: 1
 - Status: Active sequence
 - Outreach Start: 2026-01-13
@@ -61,12 +63,12 @@
 - Why NOW: NEW team evaluating (different people than 2023 closed-lost = no baggage). OSS approach shifted to Cloud trial. Activity within 7 days.
 - Why NOW Source: CSV Jan 2026
 - Why GRAFANA: OSS Loki migration FAILED after 14 months - still Elasticsearch 5/5. Cloud solves operational burden. Successfully exited Datadog (now 1/5) = proves they CAN migrate.
-- Why GRAFANA Source: Gong Nov 2023, HG Data Jan 2026 (validates)
-- Why ANYTHING: Wanted to "go all in" on Grafana stack. 99.5% uptime SLA commitment. Staff SRE hiring = scaling team.
-- Why ANYTHING Source: Gong Nov 2023, ChatAE Jan 2026
-- Outcome: SLA compliance (99.5% uptime) + Staff SRE time on reliability not infrastructure + Elastic migration unblocked
-- Data Freshness: MEDIUM
-- Data Warning: Gong quotes 26 months old - but HG Data validates Elastic migration still failed
+- Why GRAFANA Source: Gong Nov 2023 (26mo - HG Data Jan 2026 validates Elastic still 5/5)
+- Why ANYTHING: HYPOTHESIS (26mo old). Wanted to "go all in" on Grafana stack. 99.5% uptime SLA commitment. Staff SRE hiring = scaling team (current).
+- Why ANYTHING Source: Gong Nov 2023 (treat as hypothesis), ChatAE Jan 2026 (SRE hiring current)
+- Outcome: SLA compliance (if 99.5% still valid) + Staff SRE time on reliability not infrastructure + Elastic migration unblocked
+- Data Freshness: LOW-MEDIUM
+- Data Warning: Why ANYTHING quotes 26 months old. HG Data validates technical state (Elastic still 5/5). Score adjusted 88→85.
 - Top Contacts: Kamlesh (36 pages research) | Sunil (Cloud trial active)
 - Competitive: Elasticsearch 5/5 (stuck), Datadog exited to 1/5
 
@@ -88,31 +90,9 @@
 - Why ANYTHING Source: Gong Jul 2025, ChatAE Jan 2026
 - Outcome: Single pane across Splunk/ServiceNow + MTTR improvement + firewall blocker bypassed via Cloud
 - Data Freshness: MEDIUM
-- Data Warning: Gong buyer quotes 4-8 months old. Jeff Ames BURNT - DO NOT CONTACT.
+- Data Warning: Gong buyer quotes 4-6 months old. Jeff Ames BURNT - DO NOT CONTACT.
 - Top Contacts: Tommie Carter (champion, budget holder) | Julius Popoola (Loki/Alloy research)
 - Competitive: Splunk/Cribl for SIEM - Grafana as unified viz layer
-
----
-
-### ActiveCampaign
-- Score: 80
-- Tier: 2
-- Status: Ready for outreach
-- Outreach Start: 2026-01-13
-- Revisit: 2026-02-27
-- Angle: Self-hosted Loki saved 73% - Cloud-only features (AI/ML forecasting) they can't get from OSS
-- Signals: 12 daily Cloud logins (Jan 2026) | Intent signal Jan 6 | Sukanya researching AI obs, k6, Alloy
-- Why NOW: 12 active Cloud users (daily logins). Intent signal Jan 6: "Actively researching observability products." New CPO (Chai Atreya, June 2025).
-- Why NOW Source: CSV + ZoomInfo Jan 2026
-- Why GRAFANA: Self-hosted Loki = 73% cost savings (their published blog). Churn was BUDGET not product fit. Researching Cloud-only features they can't get from OSS.
-- Why GRAFANA Source: Public Blog Feb 2023, Gong Jan 2024, CSV Jan 2026
-- Why ANYTHING: Managing LGTM stack in-house = operational overhead. Still running Datadog 2/5, New Relic 2/5. CFO lockdown may have eased (2+ years since churn).
-- Why ANYTHING Source: Blog Feb 2023, HG Data Jan 2026
-- Outcome: Cloud-only features (AI/ML forecasting) + operational overhead eliminated + proven 73% savings extended
-- Data Freshness: MEDIUM
-- Data Warning: Blog/Gong context 24-35 months old - current behavior validates continued interest
-- Top Contacts: Sukanya (researching Cloud features) | Gladson George (authored case study)
-- Competitive: Datadog 2/5, New Relic 2/5 - self-hosted LGTM stack
 
 ---
 
@@ -128,11 +108,11 @@
 - Why NOW Source: ZoomInfo Jan 2026, ChatAE Jan 2026
 - Why GRAFANA: 6+ fragmented tools (AppInsights HIGH, AppDynamics, Datadog, NR, Splunk). Already invested in Prometheus + OTel + k6 (all LOW). AKS at scale with SRE practices. MyBlock microservices = distributed tracing need.
 - Why GRAFANA Source: ChatAE Jan 2026, HG Data Jan 2026
-- Why ANYTHING: Tax season = 4-month window with majority of annual revenue. Downtime during filing is existential. $150M cost savings mandate *(Fortune 2022 - 4yr stale, needs revalidation)*.
-- Why ANYTHING Source: Public, Fortune 2022
+- Why ANYTHING: Tax season = 4-month window with majority of annual revenue. Downtime during filing is existential. HYPOTHESIS: $150M cost savings mandate (Fortune 2022 - 4yr stale).
+- Why ANYTHING Source: Public, Fortune 2022 (treat cost mandate as hypothesis)
 - Outcome: Competitive evaluation before tax season lock-in + tool consolidation + reliability for filing peak
-- Data Freshness: MEDIUM-HIGH
-- Data Warning: Trial activity aging (May-Jul 2025). Cost mandate stale (2022). Current triggers strong.
+- Data Freshness: MEDIUM
+- Data Warning: Cost mandate very stale (2022). Current triggers (Dynatrace research, tax season) are strong.
 - Top Contacts: Krishna Kumar (warm, 3hr usage) | Mark Simmons (warm, k6 docs) | 33 cold contacts loaded
 - Competitive: Dynatrace (actively researching), AppInsights (incumbent HIGH), AppDynamics, Datadog, New Relic, Splunk
 
@@ -204,6 +184,28 @@
 
 ---
 
+### ActiveCampaign
+- Score: 73
+- Tier: 2
+- Status: Ready for outreach
+- Outreach Start: 2026-01-13
+- Revisit: 2026-02-27
+- Angle: Self-hosted LGTM users with Cloud activity - Cloud-only features they can't get from OSS
+- Signals: 12 daily Cloud logins (Jan 2026) | Intent signal Jan 6 | Sukanya researching AI obs, k6, Alloy
+- Why NOW: 12 active Cloud users (daily logins). Intent signal Jan 6: "Actively researching observability products." New CPO (Chai Atreya, June 2025).
+- Why NOW Source: CSV + ZoomInfo Jan 2026
+- Why GRAFANA: HYPOTHESIS (35mo old). Self-hosted Loki = 73% cost savings (Blog Feb 2023). Churn was BUDGET not product fit (Gong Jan 2024 - 24mo). Current behavior (Cloud research) validates continued interest.
+- Why GRAFANA Source: Blog Feb 2023, Gong Jan 2024 (both stale - treat as hypothesis), CSV Jan 2026 (current behavior)
+- Why ANYTHING: HYPOTHESIS (35mo old). "Managing LGTM stack in-house" = operational overhead (Blog Feb 2023). Still running Datadog 2/5, New Relic 2/5 (HG Data Jan 2026 - current). CFO lockdown status unknown.
+- Why ANYTHING Source: Blog Feb 2023 (hypothesis), HG Data Jan 2026 (current)
+- Outcome: Cloud-only features (AI/ML forecasting) + operational overhead eliminated (if still self-hosting)
+- Data Freshness: LOW
+- Data Warning: Blog/Gong context 24-35 months old. Current behavior validates interest but cost savings / operational pain is HYPOTHESIS. Score adjusted 80→73.
+- Top Contacts: Sukanya (researching Cloud features) | Gladson George (authored case study - may be stale)
+- Competitive: Datadog 2/5, New Relic 2/5 - self-hosted LGTM stack (assumed)
+
+---
+
 ### EMC Insurance
 - Score: 72
 - Tier: 2
@@ -241,7 +243,7 @@
 - Why ANYTHING Source: Hypothesis only - no ChatAE, no Gong
 - Outcome: Platform team capacity reclaimed + high-cardinality metrics handled + microservices visibility
 - Data Freshness: LOW
-- Data Warning: No ChatAE triggers. No Gong. Why ANYTHING is 100% hypothesis. Score adjusted 78 to 68.
+- Data Warning: No ChatAE triggers. No Gong. Why ANYTHING is 100% hypothesis. Score adjusted 78→68.
 - Top Contacts: Danny Seeger (611 pages) | Sufan Huang (Cloud trial) | Timothy Boex (pricing research)
 - Competitive: Self-hosted Grafana OSS, New Relic 2/5, Datadog 1/5
 
@@ -259,11 +261,11 @@
 - Why NOW Source: CSV Jan 2026, Gong Sep 2024, ChatAE Jan 2026
 - Why GRAFANA: Quote: "prefer to utilize services like Grafana to embed dashboards and go to market quickly." Already replacing Sumo Logic to Loki.
 - Why GRAFANA Source: Gong Mar-Apr 2024 (22mo old)
-- Why ANYTHING: STALE - 22 MONTHS OLD. Embedding Grafana into consumer-facing product. 70% margin threshold for software. $6/device/year business model.
-- Why ANYTHING Source: Gong Mar 2024 - needs revalidation
-- Outcome: Time-to-market (go to market quickly) + 70% margin preserved + OEM/embedded product enablement
+- Why ANYTHING: HYPOTHESIS (22mo old). Embedding Grafana into consumer-facing product. 70% margin threshold for software. $6/device/year business model.
+- Why ANYTHING Source: Gong Mar 2024 - treat as hypothesis, needs revalidation
+- Outcome: Time-to-market (go to market quickly) + 70% margin preserved (if still valid) + OEM/embedded product enablement
 - Data Freshness: LOW
-- Data Warning: Gong quotes 21-22 months old - business model context needs revalidation. Score adjusted 74 to 65.
+- Data Warning: Gong quotes 21-22 months old - business model context needs revalidation. Score adjusted 74→65.
 - Top Contacts: OEM/embedded product team | Cost savings initiative owner
 - Competitive: Sumo Logic (replacing with Loki)
 
@@ -308,7 +310,7 @@
 - Why ANYTHING Source: No confirmed source
 - Outcome: TBD after demo - need Gong to validate pain points
 - Data Freshness: VERY LOW
-- Data Warning: Gabriel = DELETE ACCOUNT request. Seth = support ticket. Both DISQUALIFIED. No Gong. Score adjusted 52 to 34.
+- Data Warning: Gabriel = DELETE ACCOUNT request. Seth = support ticket. Both DISQUALIFIED. No Gong. Score adjusted 52→34.
 - Blocker: No validated pain point - hold until demo generates Gong
 - Top Contacts: Florentin Zlatea (demo scheduled) - DO NOT CONTACT until demo outcome
 - Competitive: New Relic 2/5, Datadog 1/5, Azure App Insights 1/5
@@ -342,14 +344,14 @@
 | Account | Start Date | Type | Revisit | Status |
 |---------|------------|------|---------|--------|
 | Generac | 2026-01-15 | Cold Outbound | 2026-03-01 | Active |
-| Sweetwater | 2026-01-13 | Warm + Cold | 2026-02-27 | Active |
+| Sweetwater | 2026-01-13 | Warm | 2026-02-27 | FU #2 due - 14 non-responders |
 | Cision | 2026-01-13 | Warm + Cold | 2026-02-27 | Active |
 | AbbVie | 2026-01-14 | Warm + Cold | 2026-02-28 | Active |
-| ActiveCampaign | 2026-01-13 | Cold | 2026-02-27 | Active |
 | H&R Block | 2026-01-20 | Warm + Cold | 2026-03-06 | ACTIVE - 4 warm sent, 33 cold loaded |
 | Stifel | 2026-01-14 | Cold | 2026-02-28 | On Hold |
 | Jack Henry | 2026-01-15 | Cold | 2026-03-01 | Active |
 | 1898 & Co. | 2026-01-19 | Warm reply | 2026-03-05 | Awaiting response |
+| ActiveCampaign | 2026-01-13 | Cold | 2026-02-27 | Active |
 | Zoro | 2026-01-13 | Warm + Cold | 2026-02-27 | Testing |
 | Zebra | 2026-01-13 | Warm + Cold | 2026-02-27 | Warm sent, cold pending |
 | Omaha Steaks | 2026-01-05 | Closed-lost re-engagement | 2026-09-01 | COOLING - "Not purchasing this year" Jan 16 |
@@ -367,6 +369,9 @@
 | 1898 & Co. | NEW | 74 | +74 | Warm reply + $250K Datadog renewal Mar 26 |
 | H&R Block | NEW | 78 | +78 | Dynatrace research + tax season timing. 4 warm, 33 cold. |
 | Omaha Steaks | NEW | 38 | +38 | Closed-lost re-engagement → COOLING. Budget denied 2 consecutive years. |
+| Sweetwater | 92 | 92 | 0 | Ian reply confirmed Datadog + API Tormentor. CIO 2018 removed (8yr stale), replaced with API Tormentor. Added Ian + CIO + Chris Groleau to DNC. |
+| Cision | 88 | 85 | -3 | Why ANYTHING quotes 26mo old. Flagged as hypothesis. HG Data validates technical state. |
+| ActiveCampaign | 80 | 73 | -7 | Blog (35mo) and Gong (24mo) used as evidence. Flagged as hypothesis. Current behavior validates interest only. |
 
 ---
 
@@ -382,6 +387,19 @@ Rule: CSV Inbound Request = FLAG for SFDC validation, not auto-score.
 
 ---
 
+## Critical Learning: Stale Data Rule (Added Jan 20)
+
+- 0-6 months: Current/Recent - use as evidence
+- 6-12 months: Aging - note inline
+- 12-24 months: Stale - flag for revalidation
+- 24+ months: Very stale - treat as HYPOTHESIS, not evidence
+
+Examples:
+- CIO 2018 story (8yr) replaced by API Tormentor (Jan 2026) for build culture evidence
+- 73% savings (35mo) flagged as hypothesis, not fact
+
+---
+
 ## DO NOT CONTACT Registry
 
 | Account | Contact | Reason |
@@ -394,3 +412,6 @@ Rule: CSV Inbound Request = FLAG for SFDC validation, not auto-score.
 | Motorola | All contacts | Product gap |
 | Omaha Steaks | Eric Craig | "Not purchasing this year" - cooling until Sept 2026 |
 | Omaha Steaks | Tyler Shumaker | Don't go around Eric - cooling until Sept 2026 |
+| Sweetwater | Ian Gongwer | Replied - not a k6 user, conversation closed |
+| Sweetwater | CIO Jason Johnson | Requested DNC |
+| Sweetwater | Chris Groleau | Ghosted on closed-lost (Nov 2025) |
