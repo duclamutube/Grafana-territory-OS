@@ -246,6 +246,7 @@ const accountCardsHtml = generateAccountCards(data.accounts);
 const tier1Count = data.accounts.filter(a => String(a.tier) === '1').length;
 const tier2Count = data.accounts.filter(a => String(a.tier) === '2').length;
 const tier3Count = data.accounts.filter(a => String(a.tier) === '3').length;
+const tier4Count = data.accounts.filter(a => String(a.tier) === '4').length;
 const nurtureCount = data.accounts.filter(a => String(a.tier).toLowerCase() === 'nurture').length;
 
 let outputHtml = templateContent
@@ -255,6 +256,7 @@ let outputHtml = templateContent
   .replace('{{TIER1_COUNT}}', tier1Count)
   .replace('{{TIER2_COUNT}}', tier2Count)
   .replace('{{TIER3_COUNT}}', tier3Count)
+  .replace('{{TIER4_COUNT}}', tier4Count)
   .replace('{{NURTURE_COUNT}}', nurtureCount)
   .replace('{{ACCOUNT_CARDS}}', accountCardsHtml);
 
